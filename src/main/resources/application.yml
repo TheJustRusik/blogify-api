@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: blogify-api
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: blogify
+      auto-index-creation: true
+    redis:
+      host: localhost
