@@ -4,6 +4,7 @@ import dev.kenuki.blogifyapi.core.repo.SessionRedisRepository
 import dev.kenuki.blogifyapi.web.filter.AuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder
@@ -14,7 +15,6 @@ import reactor.core.publisher.Mono
 
 @Configuration
 @EnableWebFluxSecurity
-
 class AppConfig(
     private val sessionRedisRepository: SessionRedisRepository
 ) {
@@ -24,8 +24,10 @@ class AppConfig(
         http
             .csrf { it.disable() }
             .authorizeExchange {
-                it.pathMatchers("/auth/**").permitAll()
-                it.anyExchange().authenticated()
+                it
+                    .pathMatchers("/auth/**").permitAll()
+                    .pathMatchers(HttpMethod.GET, "/**").permitAll()
+                    .anyExchange().authenticated()
             }
             .addFilterAt(
                 AuthenticationFilter(sessionRedisRepository),
