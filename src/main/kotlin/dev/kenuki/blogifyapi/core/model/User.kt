@@ -1,5 +1,6 @@
 package dev.kenuki.blogifyapi.core.model
 
+import dev.kenuki.blogifyapi.web.dto.response.UserDTO
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
@@ -15,6 +16,7 @@ data class User(
     @Indexed(unique = true)
     val email: String,
     val password: String,
+    val status: String = "Nookie :3"
 ) : Authentication {
     override fun getName() = username
 
@@ -31,5 +33,11 @@ data class User(
     override fun setAuthenticated(isAuthenticated: Boolean) {
         println("RAHHHHH")
     }
+
+    fun toDto() = UserDTO(
+        id = id!!,
+        username = username,
+        status = status,
+    )
 
 }

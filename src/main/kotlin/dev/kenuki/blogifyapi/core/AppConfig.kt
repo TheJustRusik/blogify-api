@@ -11,6 +11,9 @@ import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.reactive.CorsWebFilter
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 import reactor.core.publisher.Mono
 
 @Configuration
@@ -25,7 +28,7 @@ class AppConfig(
             .csrf { it.disable() }
             .authorizeExchange {
                 it
-                    .pathMatchers("/auth/**").permitAll()
+                    .pathMatchers("/auth/**", "/user/all").permitAll()
                     .pathMatchers(HttpMethod.GET, "/**").permitAll()
                     .anyExchange().authenticated()
             }
@@ -35,6 +38,19 @@ class AppConfig(
             )
 
         return http.build()
+    }
+
+    @Bean
+    fun corsFilter(): CorsWebFilter {
+        val config = CorsConfiguration().apply {
+            addAllowedOrigin("http://localhost:5173")
+            addAllowedHeader("*")
+            addAllowedMethod("*")
+            allowCredentials = true
+        }
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", config)
+        return CorsWebFilter(source)
     }
 
     @Bean
