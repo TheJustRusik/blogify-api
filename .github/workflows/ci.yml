@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: docker
+    container:
+      image: thejustrusik/super-image:latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build jar
+        run: gradle bootJar --no-daemon --parallel
+
+      - name: Build & Push image
+        uses: https://github.com/elgohr/Publish-Docker-Github-Action@v5
+        with:
+          registry: git.kenuki.dev
+          name: blogify/blogify-api
+          username: ${{ secrets.PACKAGE_USERNAME }}
+          password: ${{ secrets.PACKAGE_PASSWORD }}
