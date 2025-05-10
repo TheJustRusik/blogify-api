@@ -2,6 +2,12 @@ package dev.kenuki.blogifyapi.core
 
 import dev.kenuki.blogifyapi.core.repo.SessionRedisRepository
 import dev.kenuki.blogifyapi.web.filter.AuthenticationFilter
+import io.swagger.v3.oas.models.Components
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.info.Contact
+import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.security.SecurityRequirement
+import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -61,6 +67,29 @@ class AppConfig(
         return ReactiveAuthenticationManager { authentication ->
             Mono.just(authentication)
         }
+    }
+
+    @Bean
+    fun openApiConfig(): OpenAPI {
+        return OpenAPI()
+            .addSecurityItem(SecurityRequirement().addList("Bearer"))
+            .components(
+                Components().addSecuritySchemes(
+                    "bearerToken",
+                    SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+                        .description("Fill your ACCESS token without \"Bearer \" prefix")
+                )
+            )
+            .info(
+                Info()
+                    .title("Blogify")
+                    .description("API for Blogify API")
+                    .contact(Contact().name("TheJustRusik").email("7thejustrusik7@gmail.com"))
+                    .version("1.0")
+            )
     }
 
 }
