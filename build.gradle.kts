@@ -31,6 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.6")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.80")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
