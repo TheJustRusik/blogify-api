@@ -72,10 +72,10 @@ class AppConfig(
     @Bean
     fun openApiConfig(): OpenAPI {
         return OpenAPI()
-            .addSecurityItem(SecurityRequirement().addList("Bearer"))
+            .addSecurityItem(SecurityRequirement().addList("bearerAuth"))
             .components(
                 Components().addSecuritySchemes(
-                    "bearerToken",
+                    "bearerAuth",
                     SecurityScheme()
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
